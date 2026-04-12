@@ -5,7 +5,14 @@
 //  Created by fred whitridge on 4/11/26.
 //
 
+
+
 #import "SceneDelegate.h"
+#import "KeychainHelper.h"
+#import "Constants.h"
+#import "TokenSetupViewController.h"
+#import "FacebookAdsViewController.h"
+
 
 @interface SceneDelegate ()
 
@@ -14,7 +21,26 @@
 @implementation SceneDelegate
 
 
-- (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
+- (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session
+      options:(UISceneConnectionOptions *)connectionOptions {
+
+    UIWindowScene *windowScene = (UIWindowScene *)scene;
+    self.window = [[UIWindow alloc] initWithWindowScene:windowScene];
+
+    UIViewController *rootVC;
+    if ([KeychainHelper hasValueForKey:kFBAccessTokenKey] &&
+        [KeychainHelper hasValueForKey:kFBAdAccountIDKey]) {
+        rootVC = [[FacebookAdsViewController alloc] init];
+    } else {
+        rootVC = [[TokenSetupViewController alloc] init];
+    }
+
+    UINavigationController *nav = [[UINavigationController alloc]
+                                    initWithRootViewController:rootVC];
+    nav.navigationBar.prefersLargeTitles = YES;
+    self.window.rootViewController = nav;
+    [self.window makeKeyAndVisible];
+
     // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
     // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
     // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
