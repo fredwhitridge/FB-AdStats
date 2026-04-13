@@ -262,7 +262,9 @@ static NSInteger  const kSummarySection = 0;
         NSString *urlStr = [NSString stringWithFormat:
             @"%@/%@/insights"
             @"?fields=%@"
-            @"&date_preset=last_30d"
+            //@"&date_preset=last_30d"
+            @"&date_preset=maximum"
+
             @"&access_token=%@",
             kFBGraphBaseURL,
             adID,
